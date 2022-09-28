@@ -1,0 +1,33 @@
+﻿@model ProjectReportViewModel
+@{
+    int i = 1;
+}
+<div class="card">
+    <div class="card-header">
+        @Model.ProjectCaption Report
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tr>
+                <th>Index</th>
+                <th>StartDate</th>
+                <th>StopDate</th>
+                <th>Duration(min)</th>
+                <th>Description</th>
+            </tr>
+        @foreach (var item in Model.Details)
+        {
+             <tr>
+                 <td>@(i++)</td>
+                 <td>@item.StartDate</td>
+                 <td>@item.StopDate</td>
+                 <td>@item.Duration</td>
+                 <td>@item.Description</td>
+            </tr>
+        }
+        </table>
+    </div>
+    <div class="card-footer">
+        Total Spended Time(min): @Model.TotalTime
+    </div>
+</div>

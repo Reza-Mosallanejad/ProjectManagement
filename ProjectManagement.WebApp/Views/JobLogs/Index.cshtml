@@ -1,0 +1,69 @@
+﻿@model JobLogIndexViewModel
+@{
+    int i = 1;
+}
+
+<h4>Job: @Model.JobCaption</h4>
+<form method="post" data-ajax="true" data-ajax-cache="false" data-ajax-loading="#mainLoading" data-ajax-success="onAjaxSuccess" asp-action="@(Model.IsActive?"Stop":"Start")">
+    <input asp-for="JobId" type="hidden" value="@Model.JobId" />
+    <div class="form-group mt-2">
+        <label class="form-label">@(Model.IsActive?"Stop Date:":"Start Date:")</label>
+        <input id="Date" name="Date" type="datetime-local" class="form-control" />
+    </div>
+    <div class="form-group mt-2">
+        <label class="form-label">Description</label>
+        <textarea id="Description" name="Description" class="form-control"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">@(Model.IsActive?"Stop":"Start")</button>
+    </div>
+</form>
+
+<table class="table">
+    <tr>
+        <th>Index</th>
+        <th>Start</th>
+        <th>Stop</th>
+        <th>Duration(min)</th>
+        <th>Description</th>
+        <th>Delete</th>
+    </tr>
+    @foreach (var item in Model.Details)
+    {
+        <tr>
+            <td>@(i++)</td>
+            <td>@item.StartDate</td>
+            <td>@item.StopDate</td>
+            <td>@item.Duration</td>
+            <td>@item.Description</td>
+            <td><input type="button" onclick="deleteJobLog(@item.Id)" value="&times;" class="btn btn-outline-danger"></td>
+        </tr>
+    }
+</table>
+
+
+<script>
+    function onAjaxSuccess(data) {
+        if (data.status) {
+            getJobs();
+            showJobDetail(@Model.JobId);
+            showSuccessToast(data.message);
+        } else {
+            showError(data.message);
+        }
+    }
+
+      function deleteJobLog(id){
+        if(confirm('Are you sure?')){
+            $.get('@Url.Action("Delete")/'+id,function(data){
+                if (data.status) {
+                    getJobs();
+                    showJobDetail(@Model.JobId);
+                    showSuccessToast(data.message);
+                } else {
+                    showError(data.message);
+                }
+            });
+        }
+    }
+</script>

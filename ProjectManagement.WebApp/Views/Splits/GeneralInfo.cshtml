@@ -1,0 +1,51 @@
+﻿@model SplitGeneralInfoViewModel
+
+
+<div class="card-header d-flex justify-content-between w-100">
+    <span><h3>Splits (@Model.ProjectCaption)</h3></span>
+    <input type="button" onclick="loadModal('@Url.Action("Create",new {projectId=Model.ProjectId})')" value="Create" class="btn btn-success">
+</div>
+<div id="divGeneralInfo" class="card-body">
+    <div class="row">
+        @foreach (var item in Model.Details)
+        {
+            <div class="col-xl-4 col-lg-6 col-12 py-2">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between @(item.ToDate < DateTime.Now?"bg-danger":"")">
+                        <strong>@item.Caption</strong>
+                        @if (item.ToDate < DateTime.Now)
+                        {
+                            <span class="text-white">Expired</span>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>From: </strong>@item.FromDate</li>
+                            <li class="list-group-item"><strong>To: </strong>@item.ToDate</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <input type="button" value="Delete" onclick="deleteSplit(@item.Id)" class="btn btn-danger">
+                        <input type="button" value="Edit" onclick="loadModal('@Url.Action("Edit",new{id=item.Id})')" class="btn btn-success">
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    function deleteSplit(id){
+        if(confirm('Are you sure?')){
+            $.get('@Url.Action("Delete")/'+id,function(data){
+                if (data.status) {
+                    getSplits(@Model.ProjectId);
+                    showSuccessToast(data.message);
+                } else {
+                    showError(data.message);
+                }
+            });
+        }
+    }
+</script>

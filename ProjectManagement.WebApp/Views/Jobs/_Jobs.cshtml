@@ -1,0 +1,58 @@
+﻿@model List<JobInfoViewModel>
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-xl-4 col-lg-6 col-12 py-2">
+                <div class="card">
+                      <div class="card-header d-flex justify-content-between @(!item.SplitIsActive?"bg-danger":"")">
+                        <strong>@item.Caption</strong>
+                        @if (item.IsActive)
+                        {
+                        <span class="text-info "><strong>Active</strong></span>
+                        }
+                        @if (!item.SplitIsActive)
+                        {
+                            <span class="text-white">Split Expired</span>
+                        }
+                        </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Project: </strong>@item.ProjectCaption</li>
+                            <li class="list-group-item"><strong>Split: </strong>@item.SplitCaption</li>
+                            <li class="list-group-item"><strong>Duration(min): </strong>@item.Duration</li>
+                            <li class="list-group-item"><strong>Spent Time(min): </strong>@item.SpentTime</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <input type="button" value="Delete" onclick="deleteJob(@item.Id)" class="btn btn-danger">
+                        <input type="button" value="Edit" onclick="loadModal('@Url.Action("Edit",new{id=item.Id})')" class="btn btn-success">
+                        <input type="button" value="Detail" onclick="showJobDetail(@item.Id)" class="btn btn-info">
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="w-100 d-flex align-items-center justify-content-center">
+        <span>No job found. Please select an other project and split...</span>
+    </div>
+}
+
+<script>
+    function deleteJob(id){
+        if(confirm('Are you sure?')){
+            $.get('@Url.Action("Delete")/'+id,function(data){
+                if (data.status) {
+                    getJobs();
+                    showSuccessToast(data.message);
+                } else {
+                    showError(data.message);
+                }
+            });
+        }
+    }
+</script>

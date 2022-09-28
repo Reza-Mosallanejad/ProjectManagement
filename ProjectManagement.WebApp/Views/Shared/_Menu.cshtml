@@ -1,0 +1,29 @@
+﻿<ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    @if (User != null && User.Identity != null && User.Identity.IsAuthenticated) //User is authenticated
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
+        </li>
+
+         <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
+        </li>
+
+        <li class="nav-item d-flex align-items-center mx-4">
+            <a class="nav-link text-dark p-0" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+            <span></span>
+            <span class="p-1">(@User.Identity.Name)</span>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item d-flex align-items-center">
+            <a class="nav-link text-dark p-0" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+            <span>/</span>
+            <a class="nav-link text-dark p-0" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,37 @@
+﻿@model List<ProjectViewModel>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-6 col-12 py-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between @(item.ToDate < DateTime.Now?"bg-danger":"")">
+                    <strong>@item.Caption</strong>
+                    @if (item.ToDate < DateTime.Now)
+                    {
+                        <span class="text-white">Expired</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Employer: </strong>@item.Employer</li>
+                        <li class="list-group-item"><strong>From: </strong>@item.FromDate</li>
+                        <li class="list-group-item"><strong>To: </strong>@item.ToDate</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <input type="button" value="Delete" onclick="deleteProject(@item.Id)" class="btn btn-danger">
+                    <input type="button" value="Edit" onclick="loadModal('@Url.Action("Edit",new{id=item.Id})')" class="btn btn-success">
+                    <input type="button" value="Splits" onclick="getSplits(@item.Id)" class="btn btn-info">
+                    <a href="@Url.Action("Index","ProjectReport",new{id=item.Id})" class="btn btn-info">Report</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $(function(){
+        getSplits(@Model.FirstOrDefault()?.Id??0);
+    });
+</script>

@@ -1,0 +1,44 @@
+﻿<div class="row p-0 m-0">
+    <!--Projects-->
+    <div class="col-md-6 col-12">
+        <div class="card-header d-flex justify-content-between w-100">
+            <span><h3>Projects</h3></span>
+            <input type="button" onclick="loadModal('@Url.Action("Create")')" value="Create" class="btn btn-success">
+        </div>
+        <div id="divGeneralInfo" class="card-body"></div>
+    </div>
+    <!--Project Splits-->
+    <div class="col-md-6 col-12" id="divSplits">
+    </div>
+</div>
+
+
+
+@section Scripts{
+<script>
+    $(function(){
+        getGeneralInfo();
+    });
+
+    function getGeneralInfo(){
+        $("#divGeneralInfo").load('@Url.Action("GeneralInfo")');
+    }
+
+    function getSplits(id){
+        $("#divSplits").load('@Url.Action("GeneralInfo","Splits")/'+id);
+    }
+
+    function deleteProject(id){
+        if(confirm('Are you sure?')){
+            $.get('@Url.Action("Delete")/'+id,function(data){
+                if (data.status) {
+                    getGeneralInfo();
+                    showSuccessToast(data.message);
+                } else {
+                    showError(data.message);
+                }
+            });
+        }
+    }
+</script>
+}
